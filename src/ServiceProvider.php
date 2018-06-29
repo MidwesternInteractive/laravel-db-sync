@@ -10,7 +10,7 @@ class ServiceProvider extends LaravelServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                MWI\Commands\DBSync::class
+               Commands\DBSync::class
             ]);
         }
     }

@@ -52,10 +52,17 @@ class DBSync extends Command
             $this->error("Please don't try and run this in production... will not end well.");
             return;
         }
+
+        if(!$remote_db || !$remote_db || !$ssh_user || !$ssh_pass){            
+            $this->error('Add your environment variables!');
+            return;
+        }
+        
         // Connect via ssh to dump the db on the remote server.
         $ssh = new SSH2($remote_url);
         if (!$ssh->login($ssh_user, $ssh_pass)) {
-            exit('Login failed make sure your ssh username and password is set in your env file.');
+            $this->error('Login failed make sure your ssh username and password is set in your env file.');
+            return;
         }
         $ssh->exec('mysqldump -u ' . $ssh_user . '  -pxyzzy ' . $remote_db . ' > sync_backup.sql');
 
@@ -63,7 +70,8 @@ class DBSync extends Command
         $sftp = new SFTP($remote_url);
 
         if (!$sftp->login($ssh_user, $ssh_pass)) {
-            exit('Login failed make sure your SSH username and password is set in your env file.');
+            $this->error('Login failed make sure your SSH username and password is set in your env file.');
+            return;
         }
 
         // Temporarily remove memory limit

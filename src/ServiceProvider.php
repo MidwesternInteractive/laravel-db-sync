@@ -1,5 +1,5 @@
 <?php
-namespace MWI\DBSync;
+namespace MWI\LaravelDBSync;
 use App\Observers\UserObserver;
 use App\User;
 use Form;
